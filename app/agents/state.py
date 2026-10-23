@@ -26,6 +26,10 @@ class ResearchAgentState(MessagesState):
 
     summary: NotRequired[str]
 
+    citation_report: NotRequired[dict | None]
+
+    citation_replan: NotRequired[dict]
+
     approval_records: NotRequired[
     dict[str, dict[str, str]]
     ]

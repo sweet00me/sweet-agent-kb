@@ -268,7 +268,7 @@ def record_llm_response(
     便于与 LangChain 的消息关联。
     """
 
-    if call_kind not in ("agent", "summary"):
+    if call_kind not in ("agent", "summary", "citation_check"):
         raise ValueError("未知的模型调用类型")
 
     metadata = response.response_metadata or {}
@@ -362,7 +362,7 @@ def invoke_with_metrics(
     # 在消耗 API 费用前验证基本配置。
     get_thread_id(config)
 
-    if call_kind not in ("agent", "summary"):
+    if call_kind not in ("agent", "summary", "citation_check"):
         raise ValueError("未知的模型调用类型")
 
     started = time.perf_counter()

@@ -35,6 +35,7 @@ from app.workflows.tool_approval import (
 )
 from app.tools.knowledge import search_knowledge_tool
 from app.tools.simulated_write import simulate_save_note
+from app.tools.document_analysis import analyze_document_collection
 
 
 # =====================================
@@ -44,6 +45,7 @@ from app.tools.simulated_write import simulate_save_note
 EXECUTABLE_TOOLS = [
     search_knowledge_tool,
     simulate_save_note,
+    analyze_document_collection,
 ]
 
 TOOL_NAMES = {
@@ -225,9 +227,14 @@ def controlled_tools_node(
             tool_calls=allowed_calls,
         )
 
-        tool_result = TOOL_NODE.invoke({
-            "messages": [filtered_message]
-        })
+        analysis_calls=[call for call in allowed_calls if call["name"]=="analyze_document_collection"]
+        if analysis_calls:
+            execution_config=dict(config)
+            execution_config["configurable"]={**config.get("configurable",{}),"document_analysis_permits":{
+                call["id"]:{**approval_records[call["id"]],"args":call["args"]} for call in analysis_calls}}
+            tool_result=TOOL_NODE.invoke({"messages":[filtered_message]},config=execution_config)
+        else:
+            tool_result=TOOL_NODE.invoke({"messages":[filtered_message]})
 
         tool_messages = tool_result["messages"]
 

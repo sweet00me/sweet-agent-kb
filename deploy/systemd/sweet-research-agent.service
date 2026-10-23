@@ -1,0 +1,43 @@
+# Sweet Research Agent 正式后端；先确认旧实例空闲并优雅退出，再由管理员安装启用。
+# 不读取 .env 为 systemd EnvironmentFile；继续使用业务代码中的 python-dotenv。
+[Unit]
+Description=Sweet Research Agent private backend
+Wants=network-online.target
+# 审计确认现有 clash.service 已启用；只排序，不启动、停止或绑定其生命周期。
+After=network-online.target home-sweet-Storage.mount clash.service
+RequiresMountsFor=/home/sweet/Storage
+BindsTo=home-sweet-Storage.mount
+ConditionPathIsMountPoint=/home/sweet/Storage
+StartLimitIntervalSec=300
+StartLimitBurst=5
+
+[Service]
+Type=exec
+User=sweet
+Group=sweet
+WorkingDirectory=/home/sweet/Workspace/sweet-agent-kb
+Environment="PATH=/home/sweet/miniconda3/envs/agent_kb/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+# 可选文件只承接原 tmux 的代理等运行环境；不要擅自设置或开启云端授权开关。
+EnvironmentFile=-/home/sweet/.config/sweet-research-agent/runtime.env
+ExecStartPre=/home/sweet/miniconda3/envs/agent_kb/bin/python /home/sweet/Workspace/sweet-agent-kb/deploy/check_runtime.py --startup
+ExecStart=/home/sweet/miniconda3/envs/agent_kb/bin/python -m uvicorn app.api.main:app --host 127.0.0.1 --port 8010 --workers 1 --proxy-headers --forwarded-allow-ips 127.0.0.1 --no-access-log
+Restart=on-failure
+RestartSec=10s
+# 不为部署切换强杀 SSE 后台执行器；卡住时先检查日志和请求状态，禁止直接 kill -9。
+KillSignal=SIGTERM
+KillMode=mixed
+TimeoutStopSec=infinity
+SendSIGKILL=no
+TimeoutStartSec=120s
+UMask=0077
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sweet-research-agent
+
+[Install]
+WantedBy=multi-user.target

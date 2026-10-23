@@ -1,0 +1,198 @@
+/*
+ * 文件：src/index.css
+ *
+ * 用途：
+ *   定义 Sweet Research Agent 的全局样式。
+ *   加载 Tailwind CSS。
+ *   为移动端页面提供基础布局和安全区域支持。
+ */
+
+@import "tailwindcss";
+
+:root {
+  font-family:
+    -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-width: 320px;
+}
+
+/*
+ * iPhone 底部安全区域适配。
+ * 防止底部导航被 Home Indicator 遮挡。
+ */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+
+/*
+ * 文件：src/index.css
+ * 模块：Markdown 排版样式
+ *
+ * 用途：
+ * 1. 恢复 Markdown 标题和列表的视觉层次
+ * 2. 美化代码块、表格及引用
+ * 3. 允许长表格在手机屏幕内独立横向滚动
+ * 4. 防止长文本撑破聊天区域
+ */
+
+.markdown-content {
+  min-width: 0;
+  max-width: 100%;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+/* 标题 */
+.markdown-content h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 1rem 0 0.75rem;
+}
+
+.markdown-content h2 {
+  font-size: 1.25rem;
+  font-weight: 650;
+  margin: 1.2rem 0 0.6rem;
+}
+
+.markdown-content h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 1rem 0 0.5rem;
+}
+
+/* 段落 */
+.markdown-content p {
+  margin: 0.6rem 0;
+}
+
+/* 列表 */
+.markdown-content ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin: 0.75rem 0;
+}
+
+.markdown-content ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin: 0.75rem 0;
+}
+
+.markdown-content li {
+  margin: 0.25rem 0;
+}
+
+.markdown-content li > p {
+  margin: 0.2rem 0;
+}
+
+/* 加粗与斜体 */
+.markdown-content strong {
+  font-weight: 700;
+}
+
+.markdown-content em {
+  font-style: italic;
+}
+
+/* 表格横向滚动容器 */
+.markdown-table-scroll {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 1rem 0;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.6rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 表格 */
+.markdown-content table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.markdown-content th,
+.markdown-content td {
+  padding: 0.65rem 0.8rem;
+  border-bottom: 1px solid #e2e8f0;
+  border-right: 1px solid #e2e8f0;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.markdown-content th {
+  font-weight: 600;
+  background: #f1f5f9;
+}
+
+.markdown-content tr:last-child td {
+  border-bottom: none;
+}
+
+.markdown-content th:last-child,
+.markdown-content td:last-child {
+  border-right: none;
+}
+
+/* 代码块 */
+.markdown-content pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 1rem;
+  margin: 0.9rem 0;
+  border-radius: 0.75rem;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  -webkit-overflow-scrolling: touch;
+}
+
+.markdown-content pre code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  white-space: pre;
+}
+
+/* 行内代码 */
+.markdown-content :not(pre) > code {
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.3rem;
+  background: #f1f5f9;
+  font-size: 0.9em;
+}
+
+/* 引用 */
+.markdown-content blockquote {
+  padding: 0.5rem 1rem;
+  margin: 0.9rem 0;
+  border-left: 3px solid #94a3b8;
+  background: #f8fafc;
+  color: #475569;
+  border-radius: 0 0.4rem 0.4rem 0;
+}

@@ -46,6 +46,7 @@ TOOL_POLICIES: dict[str, ToolPolicy] = {
 
     # 模拟写入工具，必须人工审批
     "simulate_save_note": "approve",
+    "analyze_document_collection": "approve",
 }
 
 
